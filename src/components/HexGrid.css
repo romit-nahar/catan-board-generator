@@ -1,0 +1,27 @@
+.hex-grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.hex-grid {
+  max-width: 90vw;
+  max-height: 80vh;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+  .hex-grid {
+    max-width: 95vw;
+    max-height: 70vh;
+    padding: 10px;
+  }
+} 

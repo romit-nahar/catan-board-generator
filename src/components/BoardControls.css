@@ -1,0 +1,139 @@
+.board-controls {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  max-width: 300px;
+  z-index: 1000;
+}
+
+.controls-header h1 {
+  margin: 0 0 10px 0;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.controls-header p {
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.controls-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.size-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.size-selector label {
+  font-weight: bold;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.size-select {
+  padding: 8px 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.size-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.generate-btn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.generate-btn:active {
+  transform: translateY(0);
+}
+
+.board-stats h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.resource-icon {
+  font-size: 1.2rem;
+}
+
+.resource-name {
+  flex: 1;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.resource-count {
+  font-weight: bold;
+  color: #4CAF50;
+  background: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  min-width: 20px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .board-controls {
+    position: relative;
+    top: auto;
+    left: auto;
+    max-width: 100%;
+    margin: 20px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+} 
