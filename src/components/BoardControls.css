@@ -2,27 +2,33 @@
   position: fixed;
   top: 20px;
   left: 20px;
-  background: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   max-width: 300px;
   z-index: 1000;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .controls-header h1 {
   margin: 0 0 10px 0;
   font-size: 1.5rem;
-  color: #333;
+  color: #f8f9fa;
   text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Georgia', serif;
 }
 
 .controls-header p {
   margin: 0 0 20px 0;
-  color: #666;
+  color: #e9ecef;
   font-size: 0.9rem;
   text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .controls-content {
@@ -40,41 +46,52 @@
 
 .size-selector label {
   font-weight: bold;
-  color: #333;
+  color: #f8f9fa;
   font-size: 0.9rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .size-select {
   padding: 8px 12px;
-  border: 2px solid #ddd;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  background: white;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8f9fa;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
 }
 
 .size-select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.size-select option {
+  background: #8B4513;
+  color: #f8f9fa;
 }
 
 .generate-btn {
   padding: 12px 20px;
-  background: linear-gradient(135deg, #4CAF50, #45a049);
+  background: linear-gradient(135deg, #2d5016, #4a7c59);
   color: white;
   border: none;
   border-radius: 10px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .generate-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #4a7c59, #2d5016);
 }
 
 .generate-btn:active {
@@ -83,9 +100,11 @@
 
 .board-stats h3 {
   margin: 0 0 15px 0;
-  color: #333;
+  color: #f8f9fa;
   font-size: 1.1rem;
   text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  font-family: 'Georgia', serif;
 }
 
 .stats-grid {
@@ -99,29 +118,34 @@
   align-items: center;
   gap: 8px;
   padding: 8px;
-  background: rgba(76, 175, 80, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
 }
 
 .resource-icon {
   font-size: 1.2rem;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 .resource-name {
   flex: 1;
-  color: #333;
+  color: #f8f9fa;
   text-transform: capitalize;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .resource-count {
   font-weight: bold;
-  color: #4CAF50;
-  background: white;
+  color: #4a7c59;
+  background: rgba(255, 255, 255, 0.9);
   padding: 2px 6px;
   border-radius: 4px;
   min-width: 20px;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
