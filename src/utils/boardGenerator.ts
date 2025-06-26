@@ -1,6 +1,6 @@
 import type { BoardConfig, HexTile } from '../types/board';
 import { generateHexPositions } from './hexLayout';
-import { generatePorts } from './portGenerator';
+import { generatePorts, generateWaterHexes } from './portGenerator';
 import { createNumberArray, createResourceArray } from './resourceDistribution';
 
 export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
@@ -8,6 +8,7 @@ export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
   const resources = createResourceArray(size);
   const numbers = createNumberArray(size);
   const ports = generatePorts(size);
+  const waterHexes = generateWaterHexes(size);
   
   const hexes: HexTile[] = positions.map((position, index) => {
     const resource = resources[index] as HexTile['resource'];
@@ -33,6 +34,7 @@ export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
     size,
     hexes,
     ports,
+    waterHexes,
     resourceCounts
   };
 }

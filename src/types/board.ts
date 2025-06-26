@@ -27,7 +27,8 @@ export interface BoardConfig {
   size: '3-4' | '5-6';
   hexes: HexTile[];
   ports: Port[];
-  resourceCounts: Record<ResourceType, number>;
+  waterHexes: Array<{ q: number; r: number }>;
+  resourceCounts: Record<string, number>;
 }
 
 export interface ResourceDistribution {

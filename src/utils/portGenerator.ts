@@ -77,6 +77,43 @@ function getWaterHexPositions(size: '3-4' | '5-6'): Array<{ q: number; r: number
   return positions;
 }
 
+// Generate water hexes for empty spaces to maintain hexagonal shape
+export function generateWaterHexes(size: '3-4' | '5-6'): Array<{ q: number; r: number }> {
+  const waterHexes: Array<{ q: number; r: number }> = [];
+  
+  if (size === '3-4') {
+    // Fill in water hexes in a 3-ring pattern around the board
+    for (let q = -3; q <= 3; q++) {
+      for (let r = -3; r <= 3; r++) {
+        const s = -q - r;
+        // Only include positions that are outside the main board (distance > 2)
+        if (Math.abs(q) > 2 || Math.abs(r) > 2 || Math.abs(s) > 2) {
+          // But not too far out (distance <= 3)
+          if (Math.abs(q) <= 3 && Math.abs(r) <= 3 && Math.abs(s) <= 3) {
+            waterHexes.push({ q, r });
+          }
+        }
+      }
+    }
+  } else {
+    // Fill in water hexes in a 4-ring pattern around the board
+    for (let q = -4; q <= 4; q++) {
+      for (let r = -4; r <= 4; r++) {
+        const s = -q - r;
+        // Only include positions that are outside the main board (distance > 3)
+        if (Math.abs(q) > 3 || Math.abs(r) > 3 || Math.abs(s) > 3) {
+          // But not too far out (distance <= 4)
+          if (Math.abs(q) <= 4 && Math.abs(r) <= 4 && Math.abs(s) <= 4) {
+            waterHexes.push({ q, r });
+          }
+        }
+      }
+    }
+  }
+  
+  return waterHexes;
+}
+
 // Shuffle array utility
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
