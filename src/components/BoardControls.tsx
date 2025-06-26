@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BoardConfig } from '../types/board';
+import { PORT_ICONS } from '../utils/portGenerator';
 import './BoardControls.css';
 
 interface BoardControlsProps {
@@ -15,6 +16,12 @@ export const BoardControls: React.FC<BoardControlsProps> = ({
   onGenerateNewBoard,
   board
 }) => {
+  // Count ports by type
+  const portCounts = board.ports.reduce((counts, port) => {
+    counts[port.type] = (counts[port.type] || 0) + 1;
+    return counts;
+  }, {} as Record<string, number>);
+
   return (
     <div className="board-controls">
       <div className="controls-header">
@@ -58,6 +65,19 @@ export const BoardControls: React.FC<BoardControlsProps> = ({
                 {resource === 'desert' && '🏜️'}
               </span>
               <span className="resource-name">{resource}</span>
+              <span className="resource-count">{count}</span>
+            </div>
+          ))}
+        </div>
+        
+        <h3>Ports ({board.ports.length}):</h3>
+        <div className="stats-grid">
+          {Object.entries(portCounts).map(([portType, count]) => (
+            <div key={portType} className="stat-item">
+              <span className="resource-icon">
+                {PORT_ICONS[portType as keyof typeof PORT_ICONS]}
+              </span>
+              <span className="resource-name">{portType}</span>
               <span className="resource-count">{count}</span>
             </div>
           ))}

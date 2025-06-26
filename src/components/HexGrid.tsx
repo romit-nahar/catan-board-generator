@@ -3,13 +3,14 @@ import type { BoardConfig } from '../types/board';
 import { getAllHexPixels } from '../utils/hexLayout';
 import './HexGrid.css';
 import { HexTile } from './HexTile';
+import { Port } from './Port';
 
 interface HexGridProps {
   board: BoardConfig;
   hexSize?: number;
 }
 
-export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 60 }) => {
+export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 80 }) => {
   // Calculate bounding box for all hexes
   const positions = board.hexes.map(h => h.position);
   const pixels = getAllHexPixels(positions, hexSize);
@@ -37,8 +38,14 @@ export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 60 }) => {
           </filter>
         </defs>
         
+        {/* Render hexes first */}
         {board.hexes.map((hex) => (
           <HexTile key={hex.id} hex={hex} size={hexSize} />
+        ))}
+        
+        {/* Render ports on top */}
+        {board.ports.map((port) => (
+          <Port key={port.id} port={port} hexSize={hexSize} />
         ))}
       </svg>
     </div>

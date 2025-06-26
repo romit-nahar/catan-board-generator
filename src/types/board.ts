@@ -1,5 +1,17 @@
 export type ResourceType = 'forest' | 'pasture' | 'fields' | 'hills' | 'mountains' | 'desert';
 
+export type PortType = 'forest' | 'pasture' | 'fields' | 'hills' | 'mountains' | 'generic';
+
+export interface Port {
+  id: string;
+  type: PortType;
+  position: {
+    q: number;
+    r: number;
+  };
+  edge: number; // 0-5, which edge of the hex the port is on
+}
+
 export interface HexTile {
   id: string;
   resource: ResourceType;
@@ -14,6 +26,7 @@ export interface HexTile {
 export interface BoardConfig {
   size: '3-4' | '5-6';
   hexes: HexTile[];
+  ports: Port[];
   resourceCounts: Record<ResourceType, number>;
 }
 
