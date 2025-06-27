@@ -29,7 +29,6 @@ export const BoardGenerator: React.FC = () => {
         boardSize={boardSize}
         onBoardSizeChange={handleBoardSizeChange}
         onGenerateNewBoard={generateNewBoard}
-        board={board}
       />
       <HexGrid board={board} />
     </div>
