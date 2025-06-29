@@ -6,7 +6,6 @@ import './HexTile.css';
 interface HexTileProps {
   hex: HexTileType;
   size?: number;
-  useVideos?: boolean;
 }
 
 const RESOURCE_COLORS = {
@@ -27,21 +26,10 @@ const RESOURCE_ICONS = {
   desert: '🏜️'
 };
 
-// Video sources for each resource type
-const RESOURCE_VIDEOS = {
-  forest: '/videos/forest.mp4',
-  pasture: '/videos/pasture.mp4',
-  fields: '/videos/fields.mp4',
-  hills: '/videos/hills.mp4',
-  mountains: '/videos/mountains.mp4',
-  desert: '/videos/desert.mp4'
-};
-
-export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80, useVideos = false }) => {
+export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80 }) => {
   const { x, y } = hexToPixel(hex.position.q, hex.position.r, size);
   const fillColor = RESOURCE_COLORS[hex.resource];
   const icon = RESOURCE_ICONS[hex.resource];
-  const videoSrc = RESOURCE_VIDEOS[hex.resource];
   
   // Manually define pointy-topped hex path
   const hexPath = `M 0 -${size} L ${size * Math.sqrt(3) / 2} -${size / 2} L ${size * Math.sqrt(3) / 2} ${size / 2} L 0 ${size} L -${size * Math.sqrt(3) / 2} ${size / 2} L -${size * Math.sqrt(3) / 2} -${size / 2} Z`;
@@ -100,49 +88,17 @@ export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80, useVideos = fa
         className="hex-shape"
       />
       
-      {/* Resource Icon or Video */}
-      {useVideos ? (
-        <foreignObject x={-size * 0.3} y={-size * 0.3} width={size * 0.6} height={size * 0.6}>
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: '50%'
-            }}
-          >
-            <source src={videoSrc} type="video/mp4" />
-            {/* Fallback to emoji if video fails to load */}
-            <div style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: size * 0.4,
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              borderRadius: '50%'
-            }}>
-              {icon}
-            </div>
-          </video>
-        </foreignObject>
-      ) : (
-        <text
-          x="0"
-          y="0"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize={size * 0.4}
-          className="resource-icon"
-        >
-          {icon}
-        </text>
-      )}
+      {/* Resource Icon */}
+      <text
+        x="0"
+        y="0"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize={size * 0.4}
+        className="resource-icon"
+      >
+        {icon}
+      </text>
       
       {/* Number Token */}
       {hex.number && (

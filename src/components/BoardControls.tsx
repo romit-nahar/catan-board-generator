@@ -6,8 +6,6 @@ interface BoardControlsProps {
   boardSize: '3-4' | '5-6';
   onBoardSizeChange: (size: '3-4' | '5-6') => void;
   onGenerateNewBoard: () => void;
-  useVideos: boolean;
-  onToggleVideos: () => void;
 }
 
 // Fixed resource distributions for each board size
@@ -53,9 +51,7 @@ const PORT_DISTRIBUTIONS = {
 export const BoardControls: React.FC<BoardControlsProps> = React.memo(({
   boardSize,
   onBoardSizeChange,
-  onGenerateNewBoard,
-  useVideos,
-  onToggleVideos
+  onGenerateNewBoard
 }) => {
   const resourceCounts = RESOURCE_DISTRIBUTIONS[boardSize];
   const portCounts = PORT_DISTRIBUTIONS[boardSize];
@@ -80,17 +76,6 @@ export const BoardControls: React.FC<BoardControlsProps> = React.memo(({
             <option value="3-4">3-4 Players (19 hexes)</option>
             <option value="5-6">5-6 Players (37 hexes)</option>
           </select>
-        </div>
-        
-        <div className="video-toggle">
-          <label htmlFor="video-toggle">Animated Resources:</label>
-          <input
-            id="video-toggle"
-            type="checkbox"
-            checked={useVideos}
-            onChange={onToggleVideos}
-            className="toggle-switch"
-          />
         </div>
         
         <button

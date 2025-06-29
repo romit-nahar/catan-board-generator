@@ -80,9 +80,65 @@ function hasConnectedSameResource(hexes: HexTile[]): boolean {
   return false;
 }
 
+// Check if any 3 hexes of the same resource type are touching each other (triangle formation)
+function hasTouchingTriangle(hexes: HexTile[]): boolean {
+  // Get all hex positions for quick lookup
+  const hexMap = new Map<string, string>();
+  hexes.forEach(hex => {
+    const key = `${hex.position.q},${hex.position.r}`;
+    hexMap.set(key, hex.resource);
+  });
+
+  // Check each hex for touching neighbors of the same resource
+  for (const hex of hexes) {
+    const touchingSameResource: string[] = [];
+    
+    // Check all 6 neighbors (pointy-topped hex directions)
+    const neighbors = [
+      { q: hex.position.q + 1, r: hex.position.r - 1 }, // top-right
+      { q: hex.position.q + 1, r: hex.position.r },     // right
+      { q: hex.position.q, r: hex.position.r + 1 },     // bottom-right
+      { q: hex.position.q - 1, r: hex.position.r + 1 }, // bottom-left
+      { q: hex.position.q - 1, r: hex.position.r },     // left
+      { q: hex.position.q, r: hex.position.r - 1 },     // top-left
+    ];
+
+    for (const neighbor of neighbors) {
+      const neighborKey = `${neighbor.q},${neighbor.r}`;
+      const neighborResource = hexMap.get(neighborKey);
+      if (neighborResource === hex.resource) {
+        touchingSameResource.push(neighborKey);
+      }
+    }
+
+    // If this hex has 2 or more neighbors of the same resource, check if they touch each other
+    if (touchingSameResource.length >= 2) {
+      // Check if any of the touching neighbors also touch each other
+      for (let i = 0; i < touchingSameResource.length; i++) {
+        for (let j = i + 1; j < touchingSameResource.length; j++) {
+          const [q1, r1] = touchingSameResource[i].split(',').map(Number);
+          const [q2, r2] = touchingSameResource[j].split(',').map(Number);
+          
+          // Check if these two neighbors are adjacent to each other
+          const neighborNeighbors = [
+            { q: q1 + 1, r: r1 - 1 }, { q: q1 + 1, r: r1 }, { q: q1, r: r1 + 1 },
+            { q: q1 - 1, r: r1 + 1 }, { q: q1 - 1, r: r1 }, { q: q1, r: r1 - 1 }
+          ];
+          
+          if (neighborNeighbors.some(n => n.q === q2 && n.r === r2)) {
+            return true; // Found 3 touching hexes of the same resource
+          }
+        }
+      }
+    }
+  }
+  
+  return false;
+}
+
 export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
   let attempts = 0;
-  const maxAttempts = 100; // Prevent infinite loops
+  const maxAttempts = 200; // Increased attempts for stricter rules
   
   while (attempts < maxAttempts) {
     const positions = generateHexPositions(size);
@@ -105,8 +161,8 @@ export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
       };
     });
     
-    // Check if the board violates the "no 3 touching same resource" rule
-    if (!hasConnectedSameResource(hexes)) {
+    // Check if the board violates either resource distribution rule
+    if (!hasConnectedSameResource(hexes) && !hasTouchingTriangle(hexes)) {
       // Count resources for stats
       const resourceCounts = hexes.reduce((counts, hex) => {
         counts[hex.resource] = (counts[hex.resource] || 0) + 1;
@@ -127,7 +183,7 @@ export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
   
   // If we couldn't generate a valid board after max attempts, return the last generated one
   // This ensures the app doesn't crash, but logs a warning
-  console.warn(`Could not generate board without more than 2 connected same resource hexes after ${maxAttempts} attempts. Using last generated board.`);
+  console.warn(`Could not generate board without resource clustering after ${maxAttempts} attempts. Using last generated board.`);
   
   const positions = generateHexPositions(size);
   const resources = createResourceArray(size);
