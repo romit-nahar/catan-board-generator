@@ -18,19 +18,9 @@ const RESOURCE_COLORS = {
   desert: 'url(#desertGradient)'
 };
 
-const RESOURCE_ICONS = {
-  forest: '🌲',
-  pasture: '🐑',
-  fields: '🌾',
-  hills: '🧱',
-  mountains: '⛰️',
-  desert: '🏜️'
-};
-
 export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80 }) => {
   const { x, y } = hexToPixel(hex.position.q, hex.position.r, size);
   const fillColor = RESOURCE_COLORS[hex.resource];
-  const icon = RESOURCE_ICONS[hex.resource];
   const imageSrc = RESOURCE_IMAGES[hex.resource];
   
   // Manually define pointy-topped hex path
@@ -80,50 +70,28 @@ export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80 }) => {
           <stop offset="50%" style={{ stopColor: '#ffcc02', stopOpacity: 1 }} />
           <stop offset="100%" style={{ stopColor: '#d7ccc8', stopOpacity: 1 }} />
         </linearGradient>
+        
+        {/* Resource image patterns */}
+        <pattern id={`${hex.resource}Pattern`} patternUnits="objectBoundingBox" width="1" height="1">
+          <image href={imageSrc} width={size * Math.sqrt(3)} height={size * 2} preserveAspectRatio="xMidYMid slice" />
+        </pattern>
       </defs>
       
       <path
         d={hexPath}
-        fill={fillColor}
+        fill={`url(#${hex.resource}Pattern)`}
         stroke="#2c3e50"
         strokeWidth="3"
         className="hex-shape"
+        onError={() => {
+          // Fallback to gradient if image fails to load
+          const path = document.querySelector(`[data-hex-id="${hex.id}"]`) as SVGPathElement;
+          if (path) {
+            path.setAttribute('fill', fillColor);
+          }
+        }}
+        data-hex-id={hex.id}
       />
-      
-      {/* Resource Image with fallback to emoji */}
-      <foreignObject x={-size} y={-size} width={size * 2} height={size * 2}>
-        <img
-          src={imageSrc}
-          alt={hex.resource}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-          }}
-          onError={(e) => {
-            // Fallback to emoji if image fails to load
-            const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
-            const parent = target.parentElement;
-            if (parent) {
-              const fallback = document.createElement('div');
-              fallback.style.cssText = `
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: ${size * 0.4}px;
-                background-color: rgba(255,255,255,0.1);
-                clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-              `;
-              fallback.textContent = icon;
-              parent.appendChild(fallback);
-            }
-          }}
-        />
-      </foreignObject>
       
       {/* Number Token - centered in the hex */}
       {hex.number && (

@@ -1,7 +1,9 @@
 // Image configuration for resource images
 // Using local images for GitHub Pages deployment
 
-const IMAGE_BASE_URL = '/images/resources/';
+const IMAGE_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '/catan-board-generator/images/resources/' // Production with base path
+  : '/images/resources/'; // Development
 
 export const RESOURCE_IMAGES = {
   desert: `${IMAGE_BASE_URL}desert.png`,

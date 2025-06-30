@@ -27,13 +27,13 @@ export function generateHexPositions(size: '3-4' | '5-6'): Array<{ q: number; r:
 }
 
 // Pointy-topped hex math - correct positioning for pointy-topped hexes
-export function hexToPixel(q: number, r: number, size: number = 60): { x: number; y: number } {
+export function hexToPixel(q: number, r: number, size: number = 80): { x: number; y: number } {
   const x = size * (Math.sqrt(3) * q + Math.sqrt(3) / 2 * r);
   const y = size * (3 / 2 * r);
   return { x, y };
 }
 
-export function getHexCorners(centerX: number, centerY: number, size: number = 60): Array<{ x: number; y: number }> {
+export function getHexCorners(centerX: number, centerY: number, size: number = 80): Array<{ x: number; y: number }> {
   const corners = [];
   // For pointy-topped hexes, start at the top point (0 degrees) and go clockwise
   for (let i = 0; i < 6; i++) {
@@ -45,7 +45,7 @@ export function getHexCorners(centerX: number, centerY: number, size: number = 6
   return corners;
 }
 
-export function getHexPath(centerX: number, centerY: number, size: number = 60): string {
+export function getHexPath(centerX: number, centerY: number, size: number = 80): string {
   const corners = getHexCorners(centerX, centerY, size);
   const path = corners.map((corner, index) => {
     const command = index === 0 ? 'M' : 'L';
