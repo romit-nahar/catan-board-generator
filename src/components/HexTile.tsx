@@ -6,8 +6,6 @@ import './HexTile.css';
 interface HexTileProps {
   hex: HexTileType;
   size?: number;
-  useVideos?: boolean;
-  useImages?: boolean;
 }
 
 const RESOURCE_COLORS = {
@@ -38,22 +36,11 @@ const RESOURCE_IMAGES = {
   desert: '/images/resources/desert.png'
 };
 
-// Video sources for each resource type
-const RESOURCE_VIDEOS = {
-  forest: '/videos/forest.mp4',
-  pasture: '/videos/pasture.mp4',
-  fields: '/videos/fields.mp4',
-  hills: '/videos/hills.mp4',
-  mountains: '/videos/mountains.mp4',
-  desert: '/videos/desert.mp4'
-};
-
-export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80, useVideos = false, useImages = false }) => {
+export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80 }) => {
   const { x, y } = hexToPixel(hex.position.q, hex.position.r, size);
   const fillColor = RESOURCE_COLORS[hex.resource];
   const icon = RESOURCE_ICONS[hex.resource];
   const imageSrc = RESOURCE_IMAGES[hex.resource];
-  const videoSrc = RESOURCE_VIDEOS[hex.resource];
   
   // Manually define pointy-topped hex path
   const hexPath = `M 0 -${size} L ${size * Math.sqrt(3) / 2} -${size / 2} L ${size * Math.sqrt(3) / 2} ${size / 2} L 0 ${size} L -${size * Math.sqrt(3) / 2} ${size / 2} L -${size * Math.sqrt(3) / 2} -${size / 2} Z`;
@@ -112,126 +99,40 @@ export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80, useVideos = fa
         className="hex-shape"
       />
       
-      {/* Resource Icon, Image, or Video */}
-      {useVideos ? (
-        <foreignObject x={-size} y={-size} width={size * 2} height={size * 2}>
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-            }}
-            onError={() => {
-              // Fallback to image if video fails to load
-              if (useImages) {
-                const videoElement = document.querySelector(`video[src="${videoSrc}"]`) as HTMLVideoElement;
-                if (videoElement) {
-                  const parent = videoElement.parentElement;
-                  if (parent) {
-                    parent.innerHTML = `
-                      <img
-                        src="${imageSrc}"
-                        alt="${hex.resource}"
-                        style="width: 100%; height: 100%; object-fit: cover; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                      />
-                      <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: ${size * 0.4}px; background-color: rgba(255,255,255,0.1); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
-                        ${icon}
-                      </div>
-                    `;
-                  }
-                }
-              }
-            }}
-          >
-            <source src={videoSrc} type="video/mp4" />
-            {/* Fallback to image if video format not supported */}
-            {useImages && (
-              <img
-                src={imageSrc}
-                alt={hex.resource}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-                }}
-                onError={(e) => {
-                  // Fallback to emoji if image fails to load
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const parent = target.parentElement;
-                  if (parent) {
-                    const fallback = document.createElement('div');
-                    fallback.style.cssText = `
-                      width: 100%;
-                      height: 100%;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      font-size: ${size * 0.4}px;
-                      background-color: rgba(255,255,255,0.1);
-                      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-                    `;
-                    fallback.textContent = icon;
-                    parent.appendChild(fallback);
-                  }
-                }}
-              />
-            )}
-          </video>
-        </foreignObject>
-      ) : useImages ? (
-        <foreignObject x={-size} y={-size} width={size * 2} height={size * 2}>
-          <img
-            src={imageSrc}
-            alt={hex.resource}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-            }}
-            onError={(e) => {
-              // Fallback to emoji if image fails to load
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                const fallback = document.createElement('div');
-                fallback.style.cssText = `
-                  width: 100%;
-                  height: 100%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: ${size * 0.4}px;
-                  background-color: rgba(255,255,255,0.1);
-                  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-                `;
-                fallback.textContent = icon;
-                parent.appendChild(fallback);
-              }
-            }}
-          />
-        </foreignObject>
-      ) : (
-        <text
-          x="0"
-          y="0"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize={size * 0.4}
-          className="resource-icon"
-        >
-          {icon}
-        </text>
-      )}
+      {/* Resource Image with fallback to emoji */}
+      <foreignObject x={-size} y={-size} width={size * 2} height={size * 2}>
+        <img
+          src={imageSrc}
+          alt={hex.resource}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
+          }}
+          onError={(e) => {
+            // Fallback to emoji if image fails to load
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            const parent = target.parentElement;
+            if (parent) {
+              const fallback = document.createElement('div');
+              fallback.style.cssText = `
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: ${size * 0.4}px;
+                background-color: rgba(255,255,255,0.1);
+                clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+              `;
+              fallback.textContent = icon;
+              parent.appendChild(fallback);
+            }
+          }}
+        />
+      </foreignObject>
       
       {/* Number Token - centered in the hex */}
       {hex.number && (
