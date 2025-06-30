@@ -3,16 +3,24 @@ import type { BoardConfig } from '../types/board';
 import { getAllHexPixels } from '../utils/hexLayout';
 import './HexGrid.css';
 import { HexTile } from './HexTile';
+import { Port } from './Port';
+import { WaterHex } from './WaterHex';
 
 interface HexGridProps {
   board: BoardConfig;
   hexSize?: number;
+  useVideos?: boolean;
+  useImages?: boolean;
 }
 
-export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 60 }) => {
-  // Calculate bounding box for all hexes
-  const positions = board.hexes.map(h => h.position);
-  const pixels = getAllHexPixels(positions, hexSize);
+export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 80, useVideos = false, useImages = false }) => {
+  // Calculate bounding box for all hexes (main hexes, ports, and water hexes)
+  const allPositions = [
+    ...board.hexes.map(h => h.position),
+    ...board.ports.map(p => p.position),
+    ...board.waterHexes
+  ];
+  const pixels = getAllHexPixels(allPositions, hexSize);
   const margin = hexSize * 1.2;
   const minX = Math.min(...pixels.map((p: { x: number; y: number }) => p.x)) - margin;
   const maxX = Math.max(...pixels.map((p: { x: number; y: number }) => p.x)) + margin;
@@ -37,8 +45,19 @@ export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 60 }) => {
           </filter>
         </defs>
         
+        {/* Render water hexes first (background) */}
+        {board.waterHexes.map((position) => (
+          <WaterHex key={`water-${position.q}-${position.r}`} position={position} hexSize={hexSize} />
+        ))}
+        
+        {/* Render main hexes */}
         {board.hexes.map((hex) => (
-          <HexTile key={hex.id} hex={hex} size={hexSize} />
+          <HexTile key={hex.id} hex={hex} size={hexSize} useVideos={useVideos} useImages={useImages} />
+        ))}
+        
+        {/* Render ports on top */}
+        {board.ports.map((port) => (
+          <Port key={port.id} port={port} hexSize={hexSize} />
         ))}
       </svg>
     </div>
