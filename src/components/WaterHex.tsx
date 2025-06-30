@@ -31,7 +31,7 @@ export const WaterHex: React.FC<WaterHexProps> = ({ position, hexSize = 80 }) =>
         fill={`url(#${gradientId})`}
         stroke="#1565c0"
         strokeWidth="3"
-        className="water-hex-path"
+        className="water-hex-shape"
       />
     </g>
   );

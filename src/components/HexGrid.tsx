@@ -9,11 +9,9 @@ import { WaterHex } from './WaterHex';
 interface HexGridProps {
   board: BoardConfig;
   hexSize?: number;
-  useVideos?: boolean;
-  useImages?: boolean;
 }
 
-export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 80, useVideos = false, useImages = false }) => {
+export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 80 }) => {
   // Calculate bounding box for all hexes (main hexes, ports, and water hexes)
   const allPositions = [
     ...board.hexes.map(h => h.position),
@@ -52,7 +50,7 @@ export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 80, useVideos
         
         {/* Render main hexes */}
         {board.hexes.map((hex) => (
-          <HexTile key={hex.id} hex={hex} size={hexSize} useVideos={useVideos} useImages={useImages} />
+          <HexTile key={hex.id} hex={hex} size={hexSize} />
         ))}
         
         {/* Render ports on top */}
