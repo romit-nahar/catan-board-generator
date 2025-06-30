@@ -1,4 +1,5 @@
 import React from 'react';
+import { RESOURCE_IMAGES } from '../config/images';
 import type { HexTile as HexTileType } from '../types/board';
 import { hexToPixel } from '../utils/hexLayout';
 import './HexTile.css';
@@ -24,16 +25,6 @@ const RESOURCE_ICONS = {
   hills: '🧱',
   mountains: '⛰️',
   desert: '🏜️'
-};
-
-// Image sources for each resource type
-const RESOURCE_IMAGES = {
-  forest: '/images/resources/forest.png',
-  pasture: '/images/resources/pasture.png',
-  fields: '/images/resources/fields.png',
-  hills: '/images/resources/hills.png',
-  mountains: '/images/resources/mountains.png',
-  desert: '/images/resources/desert.png'
 };
 
 export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80 }) => {
