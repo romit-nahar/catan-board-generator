@@ -71,26 +71,31 @@ export const HexTile: React.FC<HexTileProps> = ({ hex, size = 80 }) => {
           <stop offset="100%" style={{ stopColor: '#d7ccc8', stopOpacity: 1 }} />
         </linearGradient>
         
-        {/* Resource image patterns */}
-        <pattern id={`${hex.resource}Pattern`} patternUnits="objectBoundingBox" width="1" height="1">
-          <image href={imageSrc} width={size * Math.sqrt(3)} height={size * 2} preserveAspectRatio="xMidYMid slice" />
-        </pattern>
+        {/* Hex clip path */}
+        <clipPath id={`hexClip-${hex.id}`}>
+          <path d={hexPath} />
+        </clipPath>
       </defs>
       
+      {/* Background hex with gradient fallback */}
       <path
         d={hexPath}
-        fill={`url(#${hex.resource}Pattern)`}
+        fill={fillColor}
         stroke="#2c3e50"
         strokeWidth="3"
         className="hex-shape"
-        onError={() => {
-          // Fallback to gradient if image fails to load
-          const path = document.querySelector(`[data-hex-id="${hex.id}"]`) as SVGPathElement;
-          if (path) {
-            path.setAttribute('fill', fillColor);
-          }
-        }}
         data-hex-id={hex.id}
+      />
+      
+      {/* Image clipped to hex shape */}
+      <image
+        href={imageSrc}
+        x={-size * Math.sqrt(3) / 2}
+        y={-size}
+        width={size * Math.sqrt(3)}
+        height={size * 2}
+        clipPath={`url(#hexClip-${hex.id})`}
+        preserveAspectRatio="xMidYMid slice"
       />
       
       {/* Number Token - centered in the hex */}

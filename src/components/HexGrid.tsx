@@ -31,7 +31,9 @@ export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 80 }) => {
       <svg
         className="hex-grid"
         viewBox={viewBox}
-        preserveAspectRatio="xMidYMid meet"
+        preserveAspectRatio="xMidYMid contain"
+        width="100%"
+        height="100%"
       >
         <defs>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
