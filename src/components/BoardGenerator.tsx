@@ -7,20 +7,27 @@ import { HexGrid } from './HexGrid';
 
 export const BoardGenerator: React.FC = () => {
   const [boardSize, setBoardSize] = useState<'3-4' | '5-6'>('3-4');
-  const [board, setBoard] = useState<BoardConfig>(() => generateBoard('3-4'));
+  const [portMode, setPortMode] = useState<'default' | 'random'>('default');
+  const [board, setBoard] = useState<BoardConfig>(() => generateBoard('3-4', 'default'));
 
   const generateNewBoard = () => {
-    setBoard(generateBoard(boardSize));
+    setBoard(generateBoard(boardSize, portMode));
   };
 
   const handleBoardSizeChange = (size: '3-4' | '5-6') => {
     setBoardSize(size);
-    setBoard(generateBoard(size));
+    setBoard(generateBoard(size, portMode));
+  };
+
+  const handlePortModeChange = (mode: 'default' | 'random') => {
+    setPortMode(mode);
+    setBoard(generateBoard(boardSize, mode));
   };
 
   // Generate new board on component mount
   useEffect(() => {
     generateNewBoard();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -29,6 +36,8 @@ export const BoardGenerator: React.FC = () => {
         boardSize={boardSize}
         onBoardSizeChange={handleBoardSizeChange}
         onGenerateNewBoard={generateNewBoard}
+        portMode={portMode}
+        onPortModeChange={handlePortModeChange}
       />
       <HexGrid board={board} />
     </div>

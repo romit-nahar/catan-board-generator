@@ -45,16 +45,16 @@ export const HexGrid: React.FC<HexGridProps> = ({ board, hexSize = 80 }) => {
           </filter>
         </defs>
         
-        {/* Render water hexes first (background) */}
+        {/* Render water hexes (background only, no numbers or highlights) */}
         {board.waterHexes.map((position) => (
           <WaterHex key={`water-${position.q}-${position.r}`} position={position} hexSize={hexSize} />
         ))}
-        
+
         {/* Render main hexes */}
         {board.hexes.map((hex) => (
           <HexTile key={hex.id} hex={hex} size={hexSize} />
         ))}
-        
+
         {/* Render ports on top */}
         {board.ports.map((port) => (
           <Port key={port.id} port={port} hexSize={hexSize} />
