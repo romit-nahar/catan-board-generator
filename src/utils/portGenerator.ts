@@ -40,6 +40,19 @@ export const PORT_COLORS: Record<PortType, string> = {
   generic: '#2196F3'
 };
 
+// Official Catan static port mapping (index: type)
+const OFFICIAL_PORTS_3_4: Array<{ index: number; type: PortType }> = [
+  { index: 10, type: 'generic' },
+  { index: 6, type: 'pasture' },
+  { index: 0, type: 'generic' },
+  { index: 2, type: 'mountains' },
+  { index: 5, type: 'fields' },
+  { index: 9, type: 'generic' },
+  { index: 13, type: 'forest' },
+  { index: 14, type: 'generic' },
+  { index: 16, type: 'hills' },
+];
+
 // Get water hex positions around the board
 function getWaterHexPositions(size: '3-4' | '5-6'): Array<{ q: number; r: number }> {
   const positions: Array<{ q: number; r: number }> = [];
@@ -124,7 +137,19 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export function generatePorts(size: '3-4' | '5-6'): Port[] {
+export function generatePorts(size: '3-4' | '5-6', mode: 'default' | 'random' = 'default', waterHexes?: {q: number, r: number}[]): Port[] {
+  if (size === '3-4' && mode === 'default' && waterHexes) {
+    // Use official static mapping
+    return OFFICIAL_PORTS_3_4.map((entry) => {
+      const pos = waterHexes[entry.index];
+      return {
+        id: `port-${pos.q}-${pos.r}`,
+        type: entry.type,
+        position: { q: pos.q, r: pos.r },
+        edge: 0
+      };
+    });
+  }
   const distribution = PORT_DISTRIBUTIONS[size];
   const portTypes: PortType[] = [];
   

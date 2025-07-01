@@ -136,7 +136,7 @@ function hasTouchingTriangle(hexes: HexTile[]): boolean {
   return false;
 }
 
-export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
+export function generateBoard(size: '3-4' | '5-6', portMode: 'default' | 'random' = 'default'): BoardConfig {
   let attempts = 0;
   const maxAttempts = 200; // Increased attempts for stricter rules
   
@@ -144,8 +144,8 @@ export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
     const positions = generateHexPositions(size);
     const resources = createResourceArray(size);
     const numbers = createNumberArray(size);
-    const ports = generatePorts(size);
     const waterHexes = generateWaterHexes(size);
+    const ports = generatePorts(size, portMode, waterHexes);
     
     const hexes: HexTile[] = positions.map((position, index) => {
       const resource = resources[index] as HexTile['resource'];
@@ -188,8 +188,8 @@ export function generateBoard(size: '3-4' | '5-6'): BoardConfig {
   const positions = generateHexPositions(size);
   const resources = createResourceArray(size);
   const numbers = createNumberArray(size);
-  const ports = generatePorts(size);
   const waterHexes = generateWaterHexes(size);
+  const ports = generatePorts(size, portMode, waterHexes);
   
   const hexes: HexTile[] = positions.map((position, index) => {
     const resource = resources[index] as HexTile['resource'];

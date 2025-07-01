@@ -6,6 +6,8 @@ interface BoardControlsProps {
   boardSize: '3-4' | '5-6';
   onBoardSizeChange: (size: '3-4' | '5-6') => void;
   onGenerateNewBoard: () => void;
+  portMode: 'default' | 'random';
+  onPortModeChange: (mode: 'default' | 'random') => void;
 }
 
 // Fixed resource distributions for each board size
@@ -51,7 +53,9 @@ const PORT_DISTRIBUTIONS = {
 export const BoardControls: React.FC<BoardControlsProps> = React.memo(({
   boardSize,
   onBoardSizeChange,
-  onGenerateNewBoard
+  onGenerateNewBoard,
+  portMode,
+  onPortModeChange
 }) => {
   const resourceCounts = RESOURCE_DISTRIBUTIONS[boardSize];
   const portCounts = PORT_DISTRIBUTIONS[boardSize];
@@ -77,7 +81,18 @@ export const BoardControls: React.FC<BoardControlsProps> = React.memo(({
             <option value="5-6">5-6 Players (37 hexes)</option>
           </select>
         </div>
-        
+        <div className="size-selector">
+          <label htmlFor="port-mode">Port Placement:</label>
+          <select
+            id="port-mode"
+            value={portMode}
+            onChange={e => onPortModeChange(e.target.value as 'default' | 'random')}
+            className="size-select"
+          >
+            <option value="default">Default (Official)</option>
+            <option value="random">Random</option>
+          </select>
+        </div>
         <button
           onClick={onGenerateNewBoard}
           className="generate-btn"
